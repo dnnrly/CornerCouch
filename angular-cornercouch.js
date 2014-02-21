@@ -186,6 +186,29 @@ factory('cornercouch', ['$http', function($http) {
         row.doc = doc;
         return doc;
     };
+    
+    // UNTESTED!!!
+    CouchDB.prototype.update = function(design, model, doc) {
+        var updateURL = this.uri+
+            "/_design/" + encodeURIComponent(design) +
+            "/_view/"   + encodeURIComponent(view);
+        
+        if(doc._id) {
+            updateURL.concat("/" + encodeURIComponent(doc._id));
+        }
+            
+        var config = {
+            method: 'POST',
+            url:    this.uri + updateURL,
+	    data:   doc
+        };
+
+
+
+	return $http(config).success(function(data) {
+            doc = data;
+	});
+    }
 
     function executeQuery(db) {
         
